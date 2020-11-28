@@ -1,9 +1,11 @@
 import "./categories.scss";
+import {useState} from 'react';
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { chooseCategory } from "../../rootSlice";
 
 function Categories(props) {
+  const [isChecked, setIsChecked] = useState(false);
   const { name, options } = props;
   const dispatch = useDispatch();
   const history = useHistory();
@@ -19,12 +21,15 @@ function Categories(props) {
         res.push(column.value);
       }
     }
-
+    
+if (res.length !== 0){
     dispatch(chooseCategory(res));
     history.push("./step3");
     props.next();
-
-    //return props.onSaveData(res);
+}else{
+  alert('choose something');
+  console.log('choose something');
+}
   };
 
   return (
@@ -38,6 +43,7 @@ function Categories(props) {
                 name={name}
                 id={op.value}
                 value={op.value}
+                onChange={(e)=>{setIsChecked(e.target.checked)}}
               />
               <label htmlFor={op.value}>{op.texte}</label>
             </div>
