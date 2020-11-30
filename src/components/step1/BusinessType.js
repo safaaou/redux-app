@@ -1,21 +1,22 @@
 import "./businessType.scss";
 import {useState} from 'react';
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { chooseType } from "../../rootSlice";
+import { chooseType } from "../../redux/actions";
 
 function BusinessType(props) {
   const [isChecked, setIsChecked] = useState(false);
   const { name, options } = props;
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const history = useHistory();
+
 
 
   const handleSave = (e) => {
     e.preventDefault();
     const data = e.target.elements[name].value;
     if(data !== ''){
-        dispatch(chooseType(data));
+        props.chooseType(data);
         history.push("./step2");
         props.next();
     }else{
@@ -52,4 +53,16 @@ function BusinessType(props) {
   );
 }
 
-export default BusinessType;
+const mapStateToProps = state => {
+  return {
+    btn_radio: state.btn_radio
+  }
+}
+
+const mapDispatcherToProps = dispatch => {
+  return {
+    chooseType: (data) => dispatch(chooseType(data))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatcherToProps)(BusinessType);

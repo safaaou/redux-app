@@ -1,14 +1,15 @@
 import "./categories.scss";
 import {useState} from 'react';
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { chooseCategory } from "../../rootSlice";
+import { chooseCategory } from "../../redux/actions";
 
 function Categories(props) {
   const [isChecked, setIsChecked] = useState(false);
   const { name, options } = props;
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const history = useHistory();
+  
   
 
   const handleSave = (e) => {
@@ -23,7 +24,8 @@ function Categories(props) {
     }
     
 if (res.length !== 0){
-    dispatch(chooseCategory(res));
+    props.chooseCategory(res);
+    //dispatch(chooseCategory(res));
     history.push("./step3");
     props.next();
 }else{
@@ -60,4 +62,16 @@ if (res.length !== 0){
   );
 }
 
-export default Categories;
+const mapStateToProps = (state) => {
+  return {
+    check: state.check
+  }
+}
+
+const mapDispatcherToProps = dispatch => {
+  return {
+  chooseCategory: (data) => dispatch(chooseCategory(data))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatcherToProps)(Categories);

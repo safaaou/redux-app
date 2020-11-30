@@ -1,13 +1,12 @@
 import "./businessInfo.scss";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 //import { useHistory } from 'react-router-dom'
-import { chooseName } from "../../rootSlice";
-import { chooseEmail } from "../../rootSlice";
-import { choosePhone } from "../../rootSlice";
+import { chooseName, chooseEmail, choosePhone } from "../../redux/actions";
+
 
 function BusinessInfo(props) {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   const onSaveData = (e) => {
     e.preventDefault();
@@ -15,9 +14,9 @@ function BusinessInfo(props) {
     const email = e.target.email.value;
     const phone = e.target.phone.value;
 
-    dispatch(chooseName(name));
-    dispatch(chooseEmail(email));
-    dispatch(choosePhone(phone));
+    props.chooseName(name);
+    props.chooseEmail(email);
+    props.choosePhone(phone);
 
     props.next();
 
@@ -65,4 +64,20 @@ function BusinessInfo(props) {
   );
 }
 
-export default BusinessInfo;
+const mapStateToProps = (state) => {
+  return {
+    name: state.name,
+    email: state.email,
+    phone: state.phone
+  }
+}
+
+const mapDispatcherToProps = (dispatch) => {
+  return {
+    chooseName: (data) => dispatch(chooseName(data)),
+    chooseEmail: (data) => dispatch(chooseEmail(data)),
+    choosePhone: (data) => dispatch(choosePhone(data))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatcherToProps)(BusinessInfo);
